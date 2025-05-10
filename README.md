@@ -63,14 +63,14 @@ cd scripts
 bash train.sh
 ```
 
-**3 Run CLMU with embedded SAC model**
+**4 Run CLMU with embedded SAC model**
 ```bash
 cd data
 bash get_sac_model.sh # get SAC model (save as nc file)
 bash run_clmu_sac.sh # Run CLMU with embedded SAC model
 ```
 
-**4 Run CLMU with embedded transferred SAC model**
+**5 Run CLMU with embedded transferred SAC model**
 ```bash
 cd data
 bash run_clmu_sac_transfer.sh
