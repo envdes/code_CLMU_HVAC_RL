@@ -23,7 +23,7 @@ The Python version of BEM (CLMUX in this repo) is used solely as a surrogate mod
 
 - clmux_val: validation of clmux with CLMU/BEM
 
-- data: research data.
+- data: research data
 
     - get_clmu: run the original clmu model
 
@@ -42,3 +42,45 @@ The Python version of BEM (CLMUX in this repo) is used solely as a surrogate mod
     -  source code for RL models
     -  source code for CLMUX-based environment
     -  clmu: the modified source code for embedding SAC in CLMU (Fortran)
+
+## Usage of code
+
+Note: we are using `wandb` for recording the training of RL. If not used, please set the parameter `track` to false in `train.sh`. 
+
+**1 Create the environment**
+```bash
+conda create env -f environment.yml
+```
+**2 Run CLMU simulations and get initial data for baseline and CLMUX input**
+```bash
+cd data
+bash get_clmu.sh
+```
+
+**3 Train model**
+```bash
+cd scripts
+bash train.sh
+```
+
+**3 Run CLMU with embedded SAC model**
+```bash
+cd data
+bash get_sac_model.sh # get SAC model (save as nc file)
+bash run_clmu_sac.sh # Run CLMU with embedded SAC model
+```
+
+**4 Run CLMU with embedded transferred SAC model**
+```bash
+cd data
+bash run_clmu_sac_transfer.sh
+```
+
+**5 Analysis**
+```bash
+cd data/plotting
+# Run all notebooks to generate the figures.
+```
+
+## How to ask for help
+The [GitHub issue tracker](https://github.com/envdes/code_CLMU_HVAC_RL/issues) is the primary place for bug reports. Also feel free to chat with [Junjie Yu](https://junjieyu-uom.github.io/) (yjj1997@live.cn / junjie.yu@postgrad.manchester.ac.uk). We are happy to discussion any question on code and research. 

@@ -487,4 +487,3 @@ dependencies:
       - smmap==5.0.1
       - termcolor==2.4.0
       - wandb==0.17.4
-prefix: /home/junjieyu/miniconda3/envs/pyclmuapp
