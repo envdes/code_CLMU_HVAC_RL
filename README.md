@@ -21,7 +21,7 @@ The Python version of BEM (CLMUX in this repo) is used solely as a surrogate mod
 
 - clmux: code for Python version of CLMU/BEM
 
-- clmux_val: validation of clmux wiht CLMU/BEM
+- clmux_val: validation of clmux with CLMU/BEM
 
 - data: research data.
 
@@ -37,7 +37,7 @@ The Python version of BEM (CLMUX in this repo) is used solely as a surrogate mod
 
 - scripts: scripts for trainning RL agents using CLMUX-based environment.
 
-- src: algorithms of RL, clmuxenv
+- src: algorithms of RL, clmux Gym environment for RL agent training
   
     -  source code for RL models
     -  source code for CLMUX-based environment
