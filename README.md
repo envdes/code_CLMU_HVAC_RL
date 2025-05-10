@@ -76,7 +76,7 @@ cd data
 bash run_clmu_sac_transfer.sh
 ```
 
-**5 Analysis**
+**6 Analysis**
 ```bash
 cd data/plotting
 # Run all notebooks to generate the figures.
