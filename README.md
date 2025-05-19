@@ -2,6 +2,19 @@
 
 This repository is code of the manuscript "*Reinforcement Learning (RL) Meets Urban Climate Modeling: Investigating the Efficacy and Impacts of RL-Based HVAC Control*".
 
+**Preprint**
+```
+@misc{yu2025reinforcementlearningrlmeets,
+      title={Reinforcement Learning (RL) Meets Urban Climate Modeling: Investigating the Efficacy and Impacts of RL-Based HVAC Control}, 
+      author={Junjie Yu and John S. Schreck and David John Gagne and Keith W. Oleson and Jie Li and Yongtu Liang and Qi Liao and Mingfei Sun and David O. Topping and Zhonghua Zheng},
+      year={2025},
+      eprint={2505.07045},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2505.07045}, 
+}
+```
+
 ## Highlights
 
 - RL-based HVAC control strategies are integrated with an urban climate model. 
