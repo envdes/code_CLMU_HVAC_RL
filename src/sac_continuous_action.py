@@ -764,7 +764,7 @@ class SAC_continuous_action:
                     qf1_next_target = self.qf1_target(data.next_observations, next_state_actions)
                     qf2_next_target =self. qf2_target(data.next_observations, next_state_actions)
                     min_qf_next_target = torch.min(qf1_next_target, qf2_next_target) - alpha * next_state_log_pi
-                    next_q_value = data.rewards.flatten() + (1 - data.dones.flatten()) * self.gamma * (min_qf_next_target).view(-1)
+                    next_q_value = data.rewards.flatten() + (1 - data.dones.float().flatten()) * self.gamma * (min_qf_next_target).view(-1)
 
                 qf1_a_values = self.qf1(data.observations, data.actions).view(-1)
                 qf2_a_values = self.qf2(data.observations, data.actions).view(-1)
@@ -775,8 +775,13 @@ class SAC_continuous_action:
                 # optimize the model
                 self.q_optimizer.zero_grad()
                 qf_loss.backward()
+#! JJ
+                # ✂️ Clip gradients to avoid exploding gradients
+                max_grad_norm = 1.0  # 可以根据需要调节这个阈值
+                torch.nn.utils.clip_grad_norm_(self.qf1.parameters(), max_grad_norm)
+                torch.nn.utils.clip_grad_norm_(self.qf2.parameters(), max_grad_norm)
+#! JJ
                 self.q_optimizer.step()
-
                 if global_step % self.policy_frequency == 0:  # TD 3 Delayed update support
                     for _ in range(
                         self.policy_frequency
@@ -789,6 +794,10 @@ class SAC_continuous_action:
 
                         self.actor_optimizer.zero_grad()
                         actor_loss.backward()
+                        #! JJ
+                        # ✂️ Clip gradients to avoid exploding gradients
+                        torch.nn.utils.clip_grad_norm_(self.actor.parameters(), max_grad_norm)
+                        #! JJ
                         self.actor_optimizer.step()
 
                         if self.autotune:
@@ -798,6 +807,10 @@ class SAC_continuous_action:
 
                             a_optimizer.zero_grad()
                             alpha_loss.backward()
+                            #! JJ
+                            # ✂️ Clip gradients to avoid exploding gradients
+                            torch.nn.utils.clip_grad_norm_(log_alpha, max_grad_norm)
+                            #! JJ
                             a_optimizer.step()
                             alpha = log_alpha.exp().item()
 

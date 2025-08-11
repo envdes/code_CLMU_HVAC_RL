@@ -79,7 +79,7 @@ usp_res = usp.run(
             STOP_N = STOP_N,
             iflog = True,
             logfile = "log.log",
-            run_tyep="usp-exec"#"case", when docker container is not start)
+            crun_type="usp-exec"#"case", when docker container is not start)
         )
 
 print(usp_res)  # print the result

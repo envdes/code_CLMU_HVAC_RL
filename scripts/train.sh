@@ -10,8 +10,8 @@ source /home/junjieyu/miniconda3/bin/activate /home/junjieyu/miniconda3/envs/pyc
 echo "Starting run at: `date`"
 
 cities=("beijing" "hongkong" "newyork" "singapore" "london")
-algo=("ppo" "sac" "dqn" "qlearning")
-task_limit=10  # Number of concurrent tasks
+algo=("sac" "dqn" "qlearning")
+task_limit=15  # Number of concurrent tasks
 counter=0
 
 for ao in "${algo[@]}"; do

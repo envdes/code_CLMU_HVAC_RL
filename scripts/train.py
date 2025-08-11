@@ -28,10 +28,10 @@ def parse_args():
     parser.add_argument('--gamma', type=float, default=0.99, help='Gamma')
     parser.add_argument('--num_steps', type=int, default=48*365, help='Number of steps')
     parser.add_argument('--num_envs', type=int, default=1, help='Number of environments')
-    parser.add_argument('--project_name', type=str, default='clmux', help='Project name')
+    parser.add_argument('--project_name', type=str, default='clmux-0.5', help='Project name')
     parser.add_argument('--track', type=bool, default=True, help='Track')
     parser.add_argument('--save_model', type=bool, default=True, help='Save model')
-    parser.add_argument('--seed', type=int, default=1, help='Seed')
+    parser.add_argument('--seed', type=int, default=42, help='Seed')
     parser.add_argument('--step_num', type=int, default=48*365, help='Number of steps') 
     return parser.parse_args()
 
@@ -112,7 +112,7 @@ def workflow(args):
     if args.algo == 'sac':
         agent = SAC(env_id=f'clmux-{args.city}',
                     seed=seed, total_timesteps=total_timesteps, gamma=gamma, num_envs=num_envs,
-                    project_name=project_name,
+                    project_name=project_name, learning_starts = 48*365,
                     track=track, save_model=save_model)
         modelpath = agent.train()
     

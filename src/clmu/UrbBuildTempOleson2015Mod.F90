@@ -402,12 +402,13 @@ contains
 
 ! JJ 2024/10/12 RL
          ! input data: ac_set_point, heat_set_point, vent_ach, t_building_bef, taf
-         input_state(1) = ac_set_point(l)
-         input_state(2) = heat_set_point(l)
-         input_state(3) = vent_ach(l)
-         input_state(4) = t_building_bef(l)
-         input_state(5) = taf(l)
-
+          ! low=np.array([273.15+27, 273.15+10, 0.3, 273.15-20, 273.15-20])
+          ! high=np.array([273.15+35, 273.15+19, 0.5, 273.15+40, 273.15+40])
+         input_state(1) = ac_set_point(l) !(ac_set_point(l) - 273.15+27_r8) / (273.15_r8 + 35.0_r8 - 273.15_r8 + 27.0_r8) 
+         input_state(2) = heat_set_point(l) !(heat_set_point(l) - 273.15+10_r8) / (273.15_r8 + 19.0_r8 - 273.15_r8 + 10.0_r8)
+         input_state(3) = vent_ach(l) !(vent_ach(l) - 0.3_r8) / (0.5_r8 - 0.3_r8)
+         input_state(4) = t_building_bef(l) !(t_building_bef(l) - 273.15+20_r8) / (273.15_r8 + 40.0_r8 - 273.15_r8 + 20.0_r8)
+         input_state(5) = taf(l) !(taf(l) - 273.15+20_r8) / (273.15_r8 + 40.0_r8 - 273.15_r8 + 20.0_r8)
          call get_action(input_state, action, log_prob, mean)
         
          ac_set_point(l) = action(1)

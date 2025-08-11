@@ -9,11 +9,11 @@ echo "Starting run at: `date`"
 cities=("beijing" "hongkong" "newyork" "singapore" "london")
 
 # use the absolute path of the model will be better
-model_paths=("sac_model/clmux/_clmux-beijing__sac_continuous_action__1__1727035402/sac_continuous_action.sac" \
-"sac_model/clmux/_clmux-hongkong__sac_continuous_action__1__1727035402/sac_continuous_action.sac" \
-"sac_model/clmux/_clmux-newyork__sac_continuous_action__1__1727035402/sac_continuous_action.sac" \
-"sac_model/clmux/_clmux-singapore__sac_continuous_action__1__1727035402/sac_continuous_action.sac" \
-"sac_model/clmux/_clmux-london__sac_continuous_action__1__1727035402/sac_continuous_action.sac")
+model_paths=("/home/junjieyu/Github/CLMUX_0.5/sac_model/clmux-0.5/clmux-beijing__sac_continuous_action__42__1753199563/sac_continuous_action.sac" \
+"/home/junjieyu/Github/CLMUX_0.5/sac_model/clmux-0.5/clmux-hongkong__sac_continuous_action__42__1753199562/sac_continuous_action.sac" \
+"/home/junjieyu/Github/CLMUX_0.5/sac_model/clmux-0.5/clmux-newyork__sac_continuous_action__42__1753199563/sac_continuous_action.sac" \
+"/home/junjieyu/Github/CLMUX_0.5/sac_model/clmux-0.5/clmux-singapore__sac_continuous_action__42__1753199563/sac_continuous_action.sac" \
+"/home/junjieyu/Github/CLMUX_0.5/sac_model/clmux-0.5/clmux-london__sac_continuous_action__42__1753199562/sac_continuous_action.sac")
 
 for i in {0..4}
 do

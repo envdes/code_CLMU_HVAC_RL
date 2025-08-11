@@ -8,18 +8,19 @@ from random import random
 import xarray as xr
 import numpy as np
 
-action_space_Continuous = gym.spaces.Box(low=np.array([273.15+25, 273.15+10, 0.3]), 
-                                  high=np.array([273.15+35, 273.15+20, 0.5]), 
+action_space_Continuous = gym.spaces.Box(low=np.array([273.15+27, 273.15+10, 0.3]), 
+                                  high=np.array([273.15+35, 273.15+19, 0.5]), 
                                   dtype=np.float32, seed=0)
 
 action_space_Discrete = gym.spaces.Discrete(8, seed=0)
 
-observation_space = gym.spaces.Box(low=np.array([273.15+25, 273.15+10, 0.3, 273.15-50, 273.15-50]), 
-                                       high=np.array([273.15+35, 273.15+20, 0.5, 273.15+50, 273.15+50]), 
+observation_space = gym.spaces.Box(low=np.array([273.15+27, 273.15+10, 0.3, 273.15-20, 273.15-20]), 
+                                       high=np.array([273.15+35, 273.15+19, 0.5, 273.15+40, 273.15+40]), 
                                        dtype=np.float32, seed=0)
 
 def reward_function(info):
     # ref: https://ugr-sail.github.io/sinergym/compilation/main/pages/rewards.html
+    # ref2: https://www.sciencedirect.com/science/article/pii/S2666546820300203
     # r = -w*lambda_P*P - (1-w)*lambda_T*(|T-T_up| + |T-T_low|)
     # w: weight of power consumption
     # lambda_P: scaling constants for power consumption
@@ -31,11 +32,15 @@ def reward_function(info):
     # r: reward
     # action: action
     # info: info
-    w = 0.1
+    w = 0.5
+    lambda_T = 1/23
+    lambda_P = 1/50
+    T1 = 27 + 273.15  # upper limit of temperature in K
+    T2 = 19 + 273.15  # lower limit of temperature in K
     #Edemand = Esite/COP/Peff
     P_ac = info['eflx_urban_ac [W/m**2]']/3.6/0.43
     P_heat = info['eflx_urban_heat [W/m**2]']/0.9/0.96
-    r = -w*1*(P_ac + P_heat) - (1-w)*1*(abs(info['t_building [K]'] - 24 - 273.15) + abs(info['t_building [K]'] - 18 - 273.15))
+    r = -w*lambda_P*(P_ac + P_heat) - (1-w)*lambda_T*(abs(info['t_building [K]'] - T1) + abs(info['t_building [K]'] - T2))
     return r
 
 def get_input(time_step : int,
@@ -140,8 +145,8 @@ class clmux_gym(gym.Env):
             self.heat_set_point = action[1]
             self.vent_ach = action[2]
         elif isinstance(self.action_space, gym.spaces.Discrete):
-            self.ac_set_point = 26.0 + 273.15 if action in [0,1,2,3] else 55.0 + 273.15
-            self.heat_set_point = 15.0 + 273.15 if action in [0,1,4,5] else -15.0 + 273.15
+            self.ac_set_point = 27.0 + 273.15 if action in [0,1,2,3] else 100.0 + 273.15
+            self.heat_set_point = 19.0 + 273.15 if action in [0,1,4,5] else -50.0 + 273.15
             self.vent_ach = 0.5 if action in [0,2,4,6] else 0.3
         else:
             raise ValueError("Action space not supported")
@@ -170,7 +175,8 @@ class clmux_gym(gym.Env):
         
         self.observation = np.array([self.ac_set_point, self.heat_set_point,
                                         self.vent_ach, self.t_building_bef, self.taf])
-        
+        # normalize observation
+        # self.observation = (self.observation - self.observation_space.low) / (self.observation_space.high - self.observation_space.low)
         self.time_step += 1
         self.step_count += 1
         
@@ -208,7 +214,8 @@ class clmux_gym(gym.Env):
         
         self.observation = np.array([self.ac_set_point, self.heat_set_point, self.vent_ach, 
                                      self.t_building_bef, self.taf])
-        
+        # normalize observation
+        # self.observation = (self.observation - self.observation_space.low) / (self.observation_space.high - self.observation_space.low)
         info = {
             "ac_set_point": self.ac_set_point,
             "heat_set_point": self.heat_set_point,
