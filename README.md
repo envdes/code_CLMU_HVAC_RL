@@ -1,4 +1,4 @@
-# Code of paper "*Reinforcement Learning (RL) Meets Urban Climate Modeling: Investigating the Efficacy and Impacts of RL-Based HVAC Control*" 
+# Code of arXiv Preprint "*Reinforcement Learning (RL) Meets Urban Climate Modeling: Investigating the Efficacy and Impacts of RL-Based HVAC Control*" 
 
 This repository is code of the manuscript "*Reinforcement Learning (RL) Meets Urban Climate Modeling: Investigating the Efficacy and Impacts of RL-Based HVAC Control*".
 
