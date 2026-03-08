@@ -6,16 +6,15 @@ source /home/junjieyu/miniconda3/bin/activate /home/junjieyu/miniconda3/envs/pyc
 echo "Starting run at: `date`"
 
 
-cities=("beijing" "hongkong" "newyork" "singapore" "london")
+#cities=("beijing" "hongkong" "newyork" "singapore" "london")
+cities=("london-0.3" "london-0.5" "london-0.7")
 
 # use the absolute path of the model will be better
-model_paths=("/home/junjieyu/Github/CLMUX_0.5/sac_model/clmux-0.5/clmux-beijing__sac_continuous_action__42__1753199563/sac_continuous_action.sac" \
-"/home/junjieyu/Github/CLMUX_0.5/sac_model/clmux-0.5/clmux-hongkong__sac_continuous_action__42__1753199562/sac_continuous_action.sac" \
-"/home/junjieyu/Github/CLMUX_0.5/sac_model/clmux-0.5/clmux-newyork__sac_continuous_action__42__1753199563/sac_continuous_action.sac" \
-"/home/junjieyu/Github/CLMUX_0.5/sac_model/clmux-0.5/clmux-singapore__sac_continuous_action__42__1753199563/sac_continuous_action.sac" \
-"/home/junjieyu/Github/CLMUX_0.5/sac_model/clmux-0.5/clmux-london__sac_continuous_action__42__1753199562/sac_continuous_action.sac")
+model_paths=("/home/junjieyu/Github/RL_CLMU/sac_model/clmux-w-var/clmux-london-0.3__sac_continuous_action__42/sac_continuous_action.sac" \
+"/home/junjieyu/Github/RL_CLMU/sac_model/clmux-w-var/clmux-london-0.5__sac_continuous_action__42/sac_continuous_action.sac" \
+"/home/junjieyu/Github/RL_CLMU/sac_model/clmux-w-var/clmux-london-0.7__sac_continuous_action__42/sac_continuous_action.sac")
 
-for i in {0..4}
+for i in {0..2}
 do
     echo "Start getting clmu sac modle for ${cities[i]} at: `date`"
     # use the absolute path of the model will be better

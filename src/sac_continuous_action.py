@@ -682,7 +682,7 @@ class SAC_continuous_action:
     def train(self):
         
         #run_name = f"{self.env_id}__{self.exp_name}__{self.seed}__{int(time.time())}"
-        run_name = f"{self.project_name}/{self.env_id}__{self.exp_name}__{self.seed}__{int(time.time())}"
+        run_name = f"{self.project_name}/{self.env_id}__{self.exp_name}__{self.seed}" #__{int(time.time())}"
         if self.track:
             import wandb
             wandb.init(
@@ -833,7 +833,13 @@ class SAC_continuous_action:
                     writer.add_scalar("charts/SPS", int(global_step / (time.time() - start_time)), global_step)
                     if self.autotune:
                         writer.add_scalar("losses/alpha_loss", alpha_loss.item(), global_step)
-                        
+                    writer.add_scalar("charts/steps_reward", rewards.mean(), global_step)
+                    try:
+                        writer.add_scalar("charts/E_cost", infos['E_cost'].mean(), global_step)
+                        writer.add_scalar("charts/thermal_discomfort", infos['thermal_discomfort'].mean(), global_step)
+                        writer.add_scalar("charts/heating_setpoint", infos['heat_set_point_log'].mean(), global_step)
+                    except:
+                        pass
                         
         self.model_path = f"sac_model/{run_name}/{self.exp_name}.sac"
         if self.save_model:

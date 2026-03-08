@@ -623,7 +623,7 @@ class DQN:
     def train(self):
         
         assert self.num_envs == 1, "vectorized envs are not supported at the moment"
-        run_name = f"{self.project_name}/{self.env_id}__{self.exp_name}__{self.seed}__{int(time.time())}"
+        run_name = f"{self.project_name}/{self.env_id}__{self.exp_name}__{self.seed}" #__{int(time.time())}"
         if self.track:
             import wandb
 
@@ -698,6 +698,13 @@ class DQN:
                         writer.add_scalar("losses/q_values", old_val.mean().item(), global_step)
                         #print("SPS:", int(global_step / (time.time() - start_time)))
                         writer.add_scalar("charts/SPS", int(global_step / (time.time() - start_time)), global_step)
+                        writer.add_scalar("charts/steps_reward", rewards.mean(), global_step)   
+                        try:
+                            writer.add_scalar("charts/E_cost", infos['E_cost'].mean(), global_step)
+                            writer.add_scalar("charts/thermal_discomfort", infos['thermal_discomfort'].mean(), global_step)
+                            writer.add_scalar("charts/heating_setpoint", infos['heat_set_point_log'].mean(), global_step)
+                        except:
+                            pass
 
                     # optimize the model
                     self.optimizer.zero_grad()

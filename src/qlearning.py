@@ -107,7 +107,7 @@ class QLearning:
 
     def train(self, num_episodes=10000, max_steps=200000):
         
-        run_name = f"{self.project_name}/{self.env_id}__{self.exp_name}__{self.seed}__{int(time.time())}"
+        run_name = f"{self.project_name}/{self.env_id}__{self.exp_name}__{self.seed}" #__{int(time.time())}"
         if self.track:
             import wandb
             wandb.init(

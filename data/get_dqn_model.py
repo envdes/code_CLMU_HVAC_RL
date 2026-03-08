@@ -7,7 +7,8 @@ from src.clmuxenv import action_space_Discrete, action_space_Continuous
 import torch
 import numpy as np
 import xarray as xr
-from src.sac_continuous_action import Actor
+#from src.sac_continuous_action import Actor
+from src.dqn import QNetwork
 import argparse
 import warnings
 import os
@@ -39,7 +40,7 @@ forcing = f"/home/junjieyu/Github/CLMUX_0.5/data/hac_off/{city}/default.nc"
 epochnum = 4800
 
 if city == 'london':
-    forcing_time_range = ["2013", "2013"]
+    forcing_time_range = ["2012", "2012"]
 else:
     forcing_time_range = ['2022', '2022']
 
@@ -52,7 +53,7 @@ register(
                 surfdata = surfdata,
                 forcing = forcing,
                 epochnum = epochnum,
-                action_space = action_space_Continuous,
+                action_space = action_space_Discrete,
                 forcing_time_range = forcing_time_range,
     )
 )
@@ -63,34 +64,33 @@ env = gym.make(f'clmux-{city}')
 env = gym.vector.SyncVectorEnv([lambda: env])
 
 # 创建模型实例并初始化权重
-model = Actor(env)
+model = QNetwork(env)
 
 #model_path = "/home/junjieyu/Github/CLMUX/sac_model/clmux/_clmux-london__sac_continuous_action__1__1727035402/sac_continuous_action.sac"
 model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
 # get the model weights
 model_weights = model.state_dict()
 
-# dict to store the model weights
-data_dict = {}
-
-# transform the model weights to numpy arrays
-for param_name, param_value in model_weights.items():
-    # move the tensor to cpu and convert to numpy array
-    param_np = param_value.cpu().numpy()
+def export_to_fortran(model, file_path="/home/junjieyu/Github/RL_CLMU/data/model.bin"):
+    state_dict = model.state_dict()
+    # 按照网络层序排列 keys
+    keys = [
+        'network.0.weight', 'network.0.bias',
+        'network.2.weight', 'network.2.bias',
+        'network.4.weight', 'network.4.bias'
+    ]
     
-    # store the numpy array in the data_dict
-    if param_name == "action_scale":
-        data_dict[param_name] = (["dim_action_scale_0", "dim_action_scale_1"], param_np)  # action_scale 是二维的
-    elif param_name == "action_bias":
-        data_dict[param_name] = (["dim_action_bias_0", "dim_action_bias_1"], param_np)  # action_bias 是二维的
-    else:
-        # store the numpy array in the data_dict
-        dims = ["dim_" + param_name + "_" + str(i) for i in range(param_np.ndim)]
-        data_dict[param_name] = (dims, param_np)
+    with open(file_path, "wb") as f:
+        for key in keys:
+            # 确保转化为 float32 (Fortran 的 real)
+            data = state_dict[key].t().contiguous().detach().cpu().numpy().astype(np.float64)
+            
+            # 关键：PyTorch 权重是 (out_dim, in_dim)
+            # numpy 默认行优先存储，写入二进制后，
+            # Fortran 按列优先读取 (out_dim, in_dim) 矩阵，正好对应。
+            data.tofile(f)
+            print(f"Exported {key} with shape {data.shape}")
 
-ds = xr.Dataset(data_dict)
-
-# save to netcdf file
-#ds.to_netcdf("model_weights_and_bias_xarray.nc")
-ds.to_netcdf(output_path)
+# 假设你的模型变量名为 model
+export_to_fortran(model, file_path=output_path)
 print("Model weights and bias saved to", output_path)
