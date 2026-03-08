@@ -292,7 +292,8 @@ class PPO_continuous_action():
         self.num_iterations = self.total_timesteps // self.batch_size if self.total_timesteps is not None else self.num_iterations
         self.num_iterations = self.num_iterations if num_iterations is None else num_iterations
         
-        run_name = f"{self.project_name}/{self.agent_id}_{self.env_id}__{self.exp_name}__{self.seed}__{int(time.time())}" 
+        #run_name = f"{self.project_name}/{self.agent_id}_{self.env_id}__{self.exp_name}__{self.seed}__{int(time.time())}" 
+        run_name = f"{self.project_name}/{self.agent_id}_{self.env_id}__{self.exp_name}__{self.seed}" 
         
         # -------------------------set up logging----------------------------
         if self.track:
